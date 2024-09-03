@@ -2,7 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import Home from "./pages/Home";
+import "./index.css";
+
+import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 
 import {
@@ -14,11 +16,13 @@ import { ModalsProvider } from "@mantine/modals";
 
 import "@mantine/core/styles.css";
 import { Notifications } from "@mantine/notifications";
+import App from "./App";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <App />,
+    errorElement: <NotFound />,
   },
   {
     path: "/auth",
@@ -35,8 +39,8 @@ const blackColor: MantineColorsTuple = [
   "#404040",
   "#303030",
   "#202020",
+  "#181818",
   "#101010",
-  "#000000",
 ];
 
 const greenColor: MantineColorsTuple = [

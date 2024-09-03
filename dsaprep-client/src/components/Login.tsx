@@ -93,7 +93,7 @@ const Login: React.FC<LoginPropsType> = ({ setLogin }) => {
         p={"xl"}
         h={350}
         w={700}
-        bg={"blackColor.8"}
+        bg={"blackColor.7"}
         shadow="lg"
         radius={"lg"}
       >

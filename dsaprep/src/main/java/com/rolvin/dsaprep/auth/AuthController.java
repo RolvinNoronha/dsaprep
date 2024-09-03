@@ -34,4 +34,10 @@ public class AuthController
 
         return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }
+
+    @GetMapping("/authenticated")
+    public ResponseEntity<Boolean> isAuthenticated()
+    {
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
 }

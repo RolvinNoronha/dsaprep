@@ -79,7 +79,7 @@ const SignUp: React.FC<SignUpPropsType> = ({ setLogin }) => {
         p={"xl"}
         h={500}
         w={700}
-        bg={"blackColor.8"}
+        bg={"blackColor.7"}
         shadow="lg"
         radius={"lg"}
       >
