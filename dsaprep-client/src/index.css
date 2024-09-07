@@ -4,7 +4,7 @@ a {
   color: white;
 }
 .site-header {
-  padding: 0.2rem 1.6rem;
+  padding: 0 1.6rem;
   display: flex;
   justify-content: space-between;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -21,7 +21,7 @@ a {
 
 .site-identity h1 {
   font-size: 1.5rem;
-  margin: 0.5em 0;
+  margin: 0.4em 0;
   display: inline-block;
   display: flex;
   align-items: center;
@@ -36,4 +36,29 @@ a {
   max-width: 15rem;
   max-height: 4rem;
   overflow-y: scroll !important;
+}
+
+.split {
+  display: flex;
+  flex-direction: row;
+}
+
+.gutter {
+  background-color: rgb(26, 26, 26);
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
+
+.gutter:hover {
+  background-color: #0a84ff;
+}
+
+.gutter.gutter-horizontal {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==");
+  cursor: col-resize;
+}
+
+.gutter.gutter-vertical {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=");
+  cursor: row-resize;
 }

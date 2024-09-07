@@ -3,16 +3,15 @@ import {
   Group,
   Input,
   MultiSelect,
-  Progress,
   Select,
-  Table,
   Title,
 } from "@mantine/core";
-import React from "react";
-import Header from "../components/Header";
+import React, { useEffect, useState } from "react";
+import Header from "../components/Header/Header";
 import { IoSearch } from "react-icons/io5";
-import Problems from "../components/Problems";
-import SolvedProgress from "../components/SolvedProgress";
+import Problems from "../components/Home/Problems";
+import { CATEGORIES, DIFFICULTY, STATUS } from "../utils/constants";
+// import SolvedProgress from "../components/SolvedProgress";
 
 export type Problem = {
   id: string;
@@ -117,84 +116,21 @@ export const problems: Problem[] = [
   },
 ];
 
-const categories = [
-  "Array",
-  "String",
-  "Hash Table",
-  "Dynamic Programming",
-  "Math",
-  "Sorting",
-  "Greedy",
-  "Depth-First Search",
-  "Database",
-  "Binary Search",
-  "Matrix",
-  "Tree",
-  "Breadth-First Search",
-  "Bit Manipulation",
-  "Two Pointers",
-  "Binary Tree",
-  "Heap (Priority Queue)",
-  "Prefix Sum",
-  "Stack",
-  "Simulation",
-  "Graph",
-  "Counting",
-  "Sliding Window",
-  "Design",
-  "Backtracking",
-  "Enumeration",
-  "Union Find",
-  "Linked List",
-  "Ordered Set",
-  "Monotonic Stack",
-  "Number Theory",
-  "Trie",
-  "Segment Tree",
-  "Divide and Conquer",
-  "Queue",
-  "Bitmask",
-  "Recursion",
-  "Binary Search Tree",
-  "Binary Indexed Tree",
-  "Combinatorics",
-  "Geometry",
-  "Memoization",
-  "Hash Function",
-  "Topological Sort",
-  "String Matching",
-  "Shortest Path",
-  "Rolling Hash",
-  "Game Theory",
-  "Interactive",
-  "Data Stream",
-  "Brainteaser",
-  "Monotonic Queue",
-  "Randomized",
-  "Merge Sort",
-  "Doubly-Linked List",
-  "Iterator",
-  "Concurrency",
-  "Probability and Statistics",
-  "Counting Sort",
-  "Quickselect",
-  "Suffix Array",
-  "Bucket Sort",
-  "Minimum Spanning Tree",
-  "Shell",
-  "Line Sweep",
-  "Reservoir Sampling",
-  "Strongly Connected Component",
-  "Eulerian Circuit",
-  "Radix Sort",
-  "Rejection Sampling",
-  "Biconnected Component",
-];
-
 const Home: React.FC = () => {
+  // const [filteredProblems, setFilteredProblems] = useState<Problem[]>([]);
+  const [difficultyFilter, setDifficultyFilter] = useState<string | null>(null);
+  const [statusFilter, setStatusFilter] = useState<string | null>(null);
+  const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
+  const [searchFilter, setSearchFilter] = useState<string>("");
+
+  useEffect(() => {
+    if (difficultyFilter != null) {
+    }
+  }, [difficultyFilter, statusFilter, categoryFilter, searchFilter]);
+
   return (
     <Container fluid h={"100vh"} mx={0}>
-      <Header />
+      <Header isWorkspace={false} />
       <Container mt={"xl"} mb={"xl"} mx={10} fluid>
         <Title ta={"center"} order={2} mb={"md"}>
           Problems
@@ -203,21 +139,23 @@ const Home: React.FC = () => {
           <Select
             label="Difficulty"
             placeholder="select difficulty"
-            data={["Easy", "Medium", "Hard"]}
+            data={DIFFICULTY}
             clearable
             checkIconPosition="right"
+            onChange={(value) => setDifficultyFilter(value)}
           />
           <Select
             label="Status"
             placeholder="select status"
-            data={["Solved", "Unsolved"]}
+            data={STATUS}
             clearable
             checkIconPosition="right"
+            onChange={(value) => setStatusFilter(value)}
           />
           <MultiSelect
             label="Category"
             placeholder="select category"
-            data={categories}
+            data={CATEGORIES}
             maxDropdownHeight={150}
             searchable
             clearable
@@ -225,15 +163,18 @@ const Home: React.FC = () => {
             nothingFoundMessage="Nothing found..."
             // withScrollArea={true}
             maxLength={10}
+            onChange={(value) => setCategoryFilter(value)}
           />
           <Input
+            value={searchFilter}
+            onChange={(e) => setSearchFilter(e.target.value)}
             placeholder="search questions"
             leftSection={<IoSearch size={16} />}
           />
         </Group>
       </Container>
       <Container mt={"md"} mx={20} fluid>
-        <Group>
+        <Group justify="center" align="center">
           <Problems problems={problems} />
           {/* <SolvedProgress /> */}
         </Group>

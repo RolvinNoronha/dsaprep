@@ -1,15 +1,22 @@
 import { Table } from "@mantine/core";
 import React from "react";
-import { Problem } from "../pages/Home";
+import { Problem } from "../../pages/Home";
 import { FaRegCheckCircle } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 type ProblemsPropsType = {
   problems: Problem[];
 };
 
+// const difficultyColors = {
+//   easy: "green",
+//   medium: "yellow",
+//   hard: "red",
+// };
+
 const Problems: React.FC<ProblemsPropsType> = ({ problems }) => {
   return (
-    <Table verticalSpacing={"md"} highlightOnHover>
+    <Table w={"70%"} verticalSpacing={"md"} highlightOnHover>
       <Table.Thead>
         <Table.Tr>
           <Table.Th>Status</Table.Th>
@@ -28,7 +35,9 @@ const Problems: React.FC<ProblemsPropsType> = ({ problems }) => {
                   <FaRegCheckCircle size={18} color="green" />
                 ) : null}
               </Table.Td>
-              <Table.Td>{prob.title}</Table.Td>
+              <Table.Td>
+                <Link to={`/problems/${prob.id}`}>{prob.title}</Link>
+              </Table.Td>
               <Table.Td>{prob.difficulty}</Table.Td>
               <Table.Td>{prob.category}</Table.Td>
               <Table.Td>{prob.videoId}</Table.Td>

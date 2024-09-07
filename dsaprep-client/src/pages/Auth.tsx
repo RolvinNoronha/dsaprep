@@ -1,8 +1,8 @@
 import { Container } from "@mantine/core";
 import React, { useEffect, useState } from "react";
-import Login from "../components/Login";
-import SignUp from "../components/SignUp";
-import Header from "../components/Header";
+import Login from "../components/Auth/Login";
+import SignUp from "../components/Auth/SignUp";
+import Header from "../components/Header/Header";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { showNotification } from "@mantine/notifications";

@@ -17,6 +17,7 @@ import { ModalsProvider } from "@mantine/modals";
 import "@mantine/core/styles.css";
 import { Notifications } from "@mantine/notifications";
 import App from "./App";
+import Workspace from "./pages/Workspace";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
   {
     path: "/auth",
     element: <Auth />,
+  },
+  {
+    path: "/problems/:problemId",
+    element: <Workspace />,
   },
 ]);
 
