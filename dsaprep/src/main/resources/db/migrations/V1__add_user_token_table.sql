@@ -1,0 +1,18 @@
+CREATE TABLE "User" (
+    id BIGSERIAL PRIMARY KEY,
+    firstName VARCHAR(255) NOT NULL,
+    lastName VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL CHECK (role IN ('USER', 'ADMIN'))
+);
+
+CREATE TABLE "Token" (
+    id BIGSERIAL PRIMARY KEY,
+    token VARCHAR(255) NOT NULL,
+    tokenType VARCHAR(50) NOT NULL CHECK (tokenType = 'BEARER'),
+    expired BOOLEAN NOT NULL,
+    revoked BOOLEAN NOT NULL,
+    user_id BIGINT NOT NULL,
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES "User" (id) ON DELETE CASCADE
+);

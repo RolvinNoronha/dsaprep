@@ -1,4 +1,13 @@
-import { Container, Group, Select, Tabs } from "@mantine/core";
+import {
+  Button,
+  Code,
+  Container,
+  Group,
+  Select,
+  Tabs,
+  Text,
+  Title,
+} from "@mantine/core";
 import React, { useRef, useState } from "react";
 import Header from "../components/Header/Header";
 import { Editor } from "@monaco-editor/react";
@@ -12,6 +21,13 @@ import { useFullscreen } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 import Settings from "../components/Workspace/Settings";
 
+export type OptionsType = {
+  fontFamily: string;
+  fontSize: number;
+  theme: string;
+  tabSize: number;
+};
+
 const Workspace: React.FC = () => {
   const editorRef = useRef<any | undefined>();
   const [language, setLanguage] = useState<string | null>("python");
@@ -19,6 +35,13 @@ const Workspace: React.FC = () => {
     // @ts-ignore
     CODE_SNIPPETS[language]
   );
+
+  const [options, setOptions] = useState<OptionsType>({
+    fontFamily: "Consolas",
+    fontSize: 14,
+    theme: "vs-dark",
+    tabSize: 4,
+  });
 
   const { ref, toggle } = useFullscreen();
 
@@ -35,12 +58,12 @@ const Workspace: React.FC = () => {
   };
 
   const openModal = () =>
-    modals.openConfirmModal({
-      title: "Please confirm your action",
-      children: <Settings />,
-      labels: { confirm: "Confirm", cancel: "Cancel" },
-      onCancel: () => console.log("Cancel"),
-      onConfirm: () => console.log("Confirmed"),
+    modals.open({
+      title: "Editor Settings",
+      children: <Settings setOptions={setOptions} options={options} />,
+      // labels: { confirm: "Confirm", cancel: "Cancel" },
+      // onCancel: () => console.log("Cancel"),
+      // onConfirm: () => console.log("Confirmed"),
     });
 
   return (
@@ -51,7 +74,7 @@ const Workspace: React.FC = () => {
           <Split
             // className="split"
             direction="vertical"
-            style={{ height: "100%" }}
+            style={{ height: "90%" }}
           >
             <div style={{ overflowY: "scroll" }}>
               <Tabs defaultValue="description" w={"100%"}>
@@ -68,8 +91,29 @@ const Workspace: React.FC = () => {
                 <Tabs.Panel value="submissions">Submissions</Tabs.Panel>
               </Tabs>
             </div>
-            <div style={{ overflowY: "scroll" }}></div>
+            <div style={{ overflowY: "scroll" }}>
+              <Title order={6} mt={"lg"}>
+                Test Cases
+              </Title>
+              <Code block={true} my={"sm"}>
+                <Text>{"Input: [1, 2]"}</Text>
+              </Code>
+              <Code block={true} my={"sm"}>
+                <Text>{"Output: [1, 2]"}</Text>
+              </Code>
+              <Code block={true} my={"sm"}>
+                <Text>{"Expected Output: [1, 2]"}</Text>
+              </Code>
+            </div>
           </Split>
+          <Group justify="end" m={"md"}>
+            <Button variant="light" color={"greenColor.4"}>
+              Run
+            </Button>
+            <Button variant="filled" color={"greenColor.8"}>
+              Submit
+            </Button>
+          </Group>
         </div>
         <div>
           <Group justify="end" align="center" mb={"xs"}>
@@ -102,9 +146,10 @@ const Workspace: React.FC = () => {
             {/* <AiOutlineFullscreenExit /> */}
           </Group>
           <Editor
+            options={options}
+            theme={options.theme}
             onMount={onMount}
             height={"90%"}
-            theme="vs-dark"
             // @ts-ignore
             language={language}
             onChange={(value) => setValue(value)}

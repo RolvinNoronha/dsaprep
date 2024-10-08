@@ -4,7 +4,7 @@ import { BsArrowLeftSquareFill, BsArrowRightSquareFill } from "react-icons/bs";
 import { FaListUl, FaRegUserCircle } from "react-icons/fa";
 import { IoRocket } from "react-icons/io5";
 // import { MdOutlineTimer } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Timer from "./Timer";
 
 type HeaderPropsType = {
@@ -27,14 +27,17 @@ const Header: React.FC<HeaderPropsType> = ({ isWorkspace }) => {
             <HoverCard.Dropdown>
               <Text size="sm">johnDoe@email.com</Text>
             </HoverCard.Dropdown>
-          </HoverCard>
+        </HoverCard>
         </Group> */}
         {isWorkspace ? (
           <Group justify="center">
-            <BsArrowLeftSquareFill size={"1.6rem"} />
+            {/* <BsArrowLeftSquareFill size={"1.6rem"} /> */}
             <FaListUl size={"1rem"} />
-            <Text ml={-12}>Problem List</Text>
-            <BsArrowRightSquareFill size={"1.6rem"} />
+            <Link to={`/`}>
+              <Text ml={-12}>Problem List</Text>
+            </Link>
+
+            {/* <BsArrowRightSquareFill size={"1.6rem"} /> */}
           </Group>
         ) : null}
         <Group>

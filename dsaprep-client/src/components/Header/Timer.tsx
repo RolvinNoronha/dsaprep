@@ -1,6 +1,6 @@
 import { Container, Group, Text } from "@mantine/core";
 import React, { useEffect, useRef, useState } from "react";
-import { BsPause } from "react-icons/bs";
+// import { BsPause } from "react-icons/bs";
 import { IoCloseOutline, IoPauseOutline, IoPlayOutline } from "react-icons/io5";
 import { MdOutlineTimer } from "react-icons/md";
 import { RiRestartLine } from "react-icons/ri";
@@ -10,6 +10,7 @@ const Timer: React.FC = () => {
   const [isActive, setIsActive] = useState<boolean>(false); // Timer state (active or paused)
   const [isPaused, setIsPaused] = useState<boolean>(false); // Pause state
   const intervalRef = useRef<number | undefined>(undefined); // Reference for interval ID
+  const [timerClosing, setTimerClosing] = useState(false);
 
   useEffect(() => {
     if (isActive && !isPaused) {
@@ -49,6 +50,12 @@ const Timer: React.FC = () => {
     setIsPaused(false);
   };
 
+  const closeTimer = () => {
+    // setTimerClosing(true);
+    // setTimeout(() => {
+    setIsActive(false);
+    // }, 200);
+  };
   // Convert time in seconds to hours, minutes, and seconds
   const seconds = time % 60;
   const minutes = Math.floor((time % 3600) / 60);
@@ -57,6 +64,8 @@ const Timer: React.FC = () => {
     <>
       {isActive ? (
         <Container
+          // className={`animate-open ${timerClosing ? "animate-close" : ""}`}
+          className="animate-open"
           p={"xs"}
           bg={"blackColor.4"}
           style={{ borderRadius: "10px" }}
@@ -88,7 +97,7 @@ const Timer: React.FC = () => {
             <IoCloseOutline
               size={"1.2rem"}
               style={{ cursor: "pointer" }}
-              onClick={() => setIsActive(false)}
+              onClick={closeTimer}
             />
           </Group>
         </Container>

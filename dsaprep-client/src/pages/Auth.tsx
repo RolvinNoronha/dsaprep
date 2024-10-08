@@ -72,7 +72,7 @@ const Auth: React.FC = () => {
 
   return (
     <Container mx={0} fluid h={"100vh"}>
-      <Header />
+      <Header isWorkspace={false} />
       {login ? <Login setLogin={setLogin} /> : <SignUp setLogin={setLogin} />}
     </Container>
   );

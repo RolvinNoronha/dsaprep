@@ -62,3 +62,51 @@ a {
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=");
   cursor: row-resize;
 }
+
+.animate-open {
+  overflow: hidden;
+  animation: timer-animation-open 0.2s ease-in;
+}
+
+.animate-close {
+  overflow: hidden;
+  animation: timer-animation-close 0.2s ease-in;
+}
+
+@keyframes timer-animation-open {
+  0% {
+    transform: scaleX(0.3);
+  }
+  25% {
+    transform: scaleX(0.6);
+  }
+  50% {
+    transform: scaleX(0.9);
+  }
+
+  75% {
+    transform: scaleX(1.2);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes timer-animation-close {
+  0% {
+    transform: scaleX(1.2);
+  }
+  25% {
+    transform: scaleX(0.9);
+  }
+  50% {
+    transform: scaleX(0.6);
+  }
+
+  75% {
+    transform: scaleX(0.3);
+  }
+  100% {
+    transform: scaleX(0);
+  }
+}
