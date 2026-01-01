@@ -10,7 +10,6 @@ const Timer: React.FC = () => {
   const [isActive, setIsActive] = useState<boolean>(false); // Timer state (active or paused)
   const [isPaused, setIsPaused] = useState<boolean>(false); // Pause state
   const intervalRef = useRef<number | undefined>(undefined); // Reference for interval ID
-  const [timerClosing, setTimerClosing] = useState(false);
 
   useEffect(() => {
     if (isActive && !isPaused) {

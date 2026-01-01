@@ -1,6 +1,5 @@
 package com.rolvin.dsaprep.auth;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,5 @@
 import { Button, Group, Text } from "@mantine/core";
 import React from "react";
-import { BsArrowLeftSquareFill, BsArrowRightSquareFill } from "react-icons/bs";
 import { FaListUl, FaRegUserCircle } from "react-icons/fa";
 import { IoRocket } from "react-icons/io5";
 // import { MdOutlineTimer } from "react-icons/md";

@@ -1,39 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
 import "./index.css";
-
-import NotFound from "./pages/NotFound";
-import Auth from "./pages/Auth";
-
 import {
   createTheme,
   MantineColorsTuple,
   MantineProvider,
 } from "@mantine/core";
 import { ModalsProvider } from "@mantine/modals";
-
 import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
 import { Notifications } from "@mantine/notifications";
 import App from "./App";
-import Workspace from "./pages/Workspace";
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    errorElement: <NotFound />,
-  },
-  {
-    path: "/auth",
-    element: <Auth />,
-  },
-  {
-    path: "/problems/:problemId",
-    element: <Workspace />,
-  },
-]);
 
 const blackColor: MantineColorsTuple = [
   "#888888",
@@ -77,7 +54,7 @@ root.render(
     <MantineProvider theme={theme} defaultColorScheme="dark">
       <ModalsProvider>
         <Notifications />
-        <RouterProvider router={router} />
+        <App />
       </ModalsProvider>
     </MantineProvider>
   </React.StrictMode>

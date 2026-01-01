@@ -5,16 +5,19 @@ import {
   MultiSelect,
   Select,
   Title,
+  Loader,
+  Text
 } from "@mantine/core";
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header/Header";
 import { IoSearch } from "react-icons/io5";
 import Problems from "../components/Home/Problems";
 import { CATEGORIES, DIFFICULTY, STATUS } from "../utils/constants";
-// import SolvedProgress from "../components/SolvedProgress";
+import axios from "axios";
 
 export type Problem = {
-  id: string;
+  id: string; // This will store the slug
+  dbId: number;
   title: string;
   difficulty: string;
   category: string;
@@ -23,110 +26,44 @@ export type Problem = {
   solved: boolean;
 };
 
-export const problems: Problem[] = [
-  {
-    id: "two-sum",
-    title: "Two Sum",
-    difficulty: "Easy",
-    category: "Array",
-    order: 1,
-    videoId: "8-k1C6ehKuw",
-    solved: true,
-  },
-  {
-    id: "reverse-linked-list",
-    title: "Reverse Linked List",
-    difficulty: "Hard",
-    category: "Linked List",
-    order: 2,
-    videoId: "",
-    solved: false,
-  },
-  {
-    id: "jump-game",
-    title: "Jump Game",
-    difficulty: "Medium",
-    category: "Dynamic Programming",
-    order: 3,
-    videoId: "",
-    solved: false,
-  },
-  {
-    id: "valid-parentheses",
-    title: "Valid Parentheses",
-    difficulty: "Easy",
-    category: "Stack",
-    order: 4,
-    videoId: "xty7fr-k0TU",
-    solved: false,
-  },
-  {
-    id: "search-a-2d-matrix",
-    title: "Search a 2D Matrix",
-    difficulty: "Medium",
-    category: "Binary Search",
-    order: 5,
-    videoId: "ZfFl4torNg4",
-    solved: true,
-  },
-  {
-    id: "container-with-most-water",
-    title: "Container With Most Water",
-    difficulty: "Medium",
-    category: "Two Pointers",
-    order: 6,
-    videoId: "",
-    solved: false,
-  },
-  {
-    id: "merge-intervals",
-    title: "Merge Intervals",
-    difficulty: "Medium",
-    category: "intervals",
-    order: 7,
-    videoId: "",
-    solved: true,
-  },
-  {
-    id: "maximum-depth-of-binary-tree",
-    title: "Maximum Depth of Binary Tree",
-    difficulty: "Easy",
-    category: "Tree",
-    order: 8,
-    videoId: "4qYTqOiRMoM",
-    solved: true,
-  },
-  {
-    id: "best-time-to-buy-and-sell-stock",
-    title: "Best Time to Buy and Sell Stock",
-    difficulty: "Easy",
-    category: "Array",
-    order: 9,
-    videoId: "",
-    solved: false,
-  },
-  {
-    id: "subsets",
-    title: "Subsets",
-    difficulty: "Medium",
-    category: "Backtracking",
-    order: 10,
-    videoId: "",
-    solved: false,
-  },
-];
-
 const Home: React.FC = () => {
-  // const [filteredProblems, setFilteredProblems] = useState<Problem[]>([]);
+  const [problems, setProblems] = useState<Problem[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [difficultyFilter, setDifficultyFilter] = useState<string | null>(null);
-  const [statusFilter, setStatusFilter] = useState<string | null>(null);
-  const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
   const [searchFilter, setSearchFilter] = useState<string>("");
 
   useEffect(() => {
-    if (difficultyFilter != null) {
-    }
-  }, [difficultyFilter, statusFilter, categoryFilter, searchFilter]);
+    const fetchProblems = async () => {
+        try {
+            const response = await axios.get(
+                `${import.meta.env.VITE_BASE_URL}${import.meta.env.VITE_API_VERSION}/problems`
+            );
+            const fetchedProblems = response.data.map((p: any) => ({
+                id: p.slug,
+                dbId: p.id,
+                title: p.title,
+                difficulty: p.difficulty,
+                category: "Algorithms", // Placeholder
+                order: p.id,
+                videoId: "",
+                solved: false // Placeholder
+            }));
+            setProblems(fetchedProblems);
+        } catch (error) {
+            console.error("Error fetching problems:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+    fetchProblems();
+  }, []);
+
+  const filteredProblems = problems.filter((problem) => {
+    const matchesDifficulty = difficultyFilter ? problem.difficulty === difficultyFilter : true;
+    const matchesSearch = problem.title.toLowerCase().includes(searchFilter.toLowerCase());
+    // Status and Category filters are placeholders for now
+    return matchesDifficulty && matchesSearch;
+  });
 
   return (
     <Container fluid h={"100vh"} mx={0}>
@@ -150,7 +87,6 @@ const Home: React.FC = () => {
             data={STATUS}
             clearable
             checkIconPosition="right"
-            onChange={(value) => setStatusFilter(value)}
           />
           <MultiSelect
             label="Category"
@@ -161,9 +97,7 @@ const Home: React.FC = () => {
             clearable
             checkIconPosition="right"
             nothingFoundMessage="Nothing found..."
-            // withScrollArea={true}
             maxLength={10}
-            onChange={(value) => setCategoryFilter(value)}
           />
           <Input
             value={searchFilter}
@@ -175,8 +109,9 @@ const Home: React.FC = () => {
       </Container>
       <Container mt={"md"} mx={20} fluid>
         <Group justify="center" align="center">
-          <Problems problems={problems} />
-          {/* <SolvedProgress /> */}
+            {loading ? <Loader /> : (
+                filteredProblems.length > 0 ? <Problems problems={filteredProblems} /> : <Text>No problems found</Text>
+            )}
         </Group>
       </Container>
     </Container>

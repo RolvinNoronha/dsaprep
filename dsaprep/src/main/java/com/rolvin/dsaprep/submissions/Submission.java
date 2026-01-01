@@ -1,9 +1,8 @@
 package com.rolvin.dsaprep.submissions;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.rolvin.dsaprep.problems.Problem;
+import com.rolvin.dsaprep.user.User;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
@@ -13,15 +12,16 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "\"Submission\"")
 public class Submission
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String code;
     private int languageId;
     private String error;
-    private float runtTime;
+    private float runTime;
     private float memory;
     private String message;
     private Date createdAt;
@@ -29,4 +29,12 @@ public class Submission
     private String testCase;
     private String yourOutput;
     private String expectedOutput;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "problem_id")
+    private Problem problem;
 }

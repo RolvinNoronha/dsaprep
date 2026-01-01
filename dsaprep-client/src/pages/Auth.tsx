@@ -26,7 +26,7 @@ const Auth: React.FC = () => {
             url:
               import.meta.env.VITE_BASE_URL +
               import.meta.env.VITE_API_VERSION +
-              "/authenticated",
+              "/auth/authenticated",
           });
 
           if (response.status === 200) {

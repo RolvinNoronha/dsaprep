@@ -54,7 +54,7 @@ const SignUp: React.FC<SignUpPropsType> = ({ setLogin }) => {
       if (response.status === 200) {
         localStorage.setItem("jwt", response.data.token);
         setSignupForm(false);
-        navigate("/home");
+        navigate("/");
       }
     } catch (err) {
       setSignupForm(false);

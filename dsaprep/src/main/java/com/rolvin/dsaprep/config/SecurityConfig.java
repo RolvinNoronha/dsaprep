@@ -27,10 +27,12 @@ public class SecurityConfig
     {
         http.csrf(csrf -> csrf.disable());
         http.authorizeHttpRequests((requests) -> {
-            ((AuthorizeHttpRequestsConfigurer.AuthorizedUrl)requests
+            requests
                     .requestMatchers("/h2-console/**").permitAll()
                     .requestMatchers("/api/v1/auth/**").permitAll()
-                    .anyRequest()).authenticated();
+                    .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/problems/**").permitAll()
+                    .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/submissions/run").permitAll()
+                    .anyRequest().authenticated();
         });
         http.authenticationProvider(authenticationProvider);
 

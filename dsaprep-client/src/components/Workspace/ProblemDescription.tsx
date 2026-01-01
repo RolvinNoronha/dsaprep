@@ -1,63 +1,67 @@
-import { Code, Container, Group, List, Text, Title } from "@mantine/core";
+import { Code, Container, Group, Text, Title, Loader } from "@mantine/core";
 import React from "react";
 import { AiFillDislike, AiFillLike } from "react-icons/ai";
 
-type ExamplesType = {
-  Input: string;
-  Output: String;
-  Explanation?: string;
+export type ProblemDetails = {
+    dbId: number;
+    title: string;
+    slug: string;
+    description: string;
+    difficulty: string;
+    exampleTestCases: string; // JSON string
+    constraints: string;
 };
 
-const Examples: ExamplesType[] = [
-  {
-    Input: "nums = [2,7,11,15], target = 9",
-    Output: "[0,1]",
-    Explanation: "Because nums[0] + nums[1] == 9, we return [0, 1]",
-  },
-  { Input: "nums = [3,2,4], target = 6", Output: "[1,2]" },
-  {
-    Input: "nums = [3,3], target = 6",
-    Output: "[0,1]",
-  },
-];
+type Props = {
+    problem: ProblemDetails | null;
+    loading: boolean;
+};
 
-const ProblemDescription: React.FC = () => {
+const ProblemDescription: React.FC<Props> = ({ problem, loading }) => {
+  if (loading) {
+      return <Loader />;
+  }
+
+  if (!problem) {
+      return <Text>Problem not found</Text>;
+  }
+
+  // Parse exampleTestCases if it's a JSON string, otherwise handle as plain text or ignore for now
+  // Assuming simple text format for now based on what I see
+  
   return (
     <Container>
       <Title order={4} my={"lg"}>
-        1. Problem Title
+        {problem.dbId}. {problem.title}
       </Title>
       <Group mb={"md"}>
-        <Text c={"green"}>Easy</Text>
+        <Text c={problem.difficulty === 'Easy' ? "green" : problem.difficulty === 'Medium' ? "yellow" : "red"}>
+            {problem.difficulty}
+        </Text>
         <AiFillLike size={"1.2rem"} />
         <AiFillDislike size={"1.2rem"} />
       </Group>
       <Text>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore eveniet
-        dignissimos vero consequuntur harum voluptatum aliquam consectetur
-        placeat quaerat. Delectus.
+        {problem.description}
       </Text>
-      {Examples.map((example, idx) => {
-        return (
-          <Code block={true} my={"md"}>
-            <Title order={6} mb={"sm"}>
-              {"Example " + (idx + 1)}
-            </Title>
-            <Text>{"Input: " + example.Input}</Text>
-            <Text>{"Output: " + example.Output}</Text>
-            <Text>{"Explanation: " + example.Explanation}</Text>
-          </Code>
-        );
-      })}
+      
+      {/* 
+        Ideally we would parse exampleTestCases here. 
+        For now just displaying raw if available or placeholders if you want.
+      */}
+      {problem.exampleTestCases && (
+        <Code block={true} my={"md"}>
+             <Title order={6} mb={"sm"}>Examples</Title>
+             <Text>{problem.exampleTestCases}</Text>
+        </Code>
+      )}
+
       <Title order={6} mb={"sm"}>
         Constraints:
       </Title>
-      <List mb={"lg"}>
-        <List.Item>{"2 <= nums.length <= 104"}</List.Item>
-        <List.Item>{"-109 <= nums[i] <= 109"}</List.Item>
-        <List.Item>{"-109 <= target <= 109"}</List.Item>
-        <List.Item>{"Only one valid answer exists."}</List.Item>
-      </List>
+      <Code block={true}>
+        <Text>{problem.constraints}</Text>
+      </Code>
     </Container>
   );
 };

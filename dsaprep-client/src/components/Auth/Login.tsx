@@ -50,7 +50,7 @@ const Login: React.FC<LoginPropsType> = ({ setLogin }) => {
       if (response.status === 200) {
         setLoginForm(false);
         localStorage.setItem("jwt", response.data.token);
-        navigate("/home");
+        navigate("/");
       }
     } catch (err) {
       setLoginForm(false);
