@@ -75,11 +75,8 @@ const Workspace: React.FC = () => {
   const [loadingSubmissions, setLoadingSubmissions] = useState<boolean>(false);
 
   const editorRef = useRef<any | undefined>();
-  const [language, setLanguage] = useState<string | null>("python");
-  const [value, setValue] = useState<string | undefined>(
-    // @ts-ignore
-    CODE_SNIPPETS[language]
-  );
+  const [language, setLanguage] = useState<string>("python");
+  const [value, setValue] = useState<string | undefined>(CODE_SNIPPETS.python);
 
   const [options, setOptions] = useState<OptionsType>({
     fontFamily: "Consolas",
@@ -131,9 +128,11 @@ const Workspace: React.FC = () => {
   };
 
   const changeLanguage = (value: string | null) => {
-    setLanguage(value);
-    // @ts-ignore
-    setValue(CODE_SNIPPETS[value]);
+    if (value) {
+      setLanguage(value);
+      // @ts-ignore
+      setValue(CODE_SNIPPETS[value]);
+    }
   };
 
   const openModal = () =>
@@ -175,14 +174,23 @@ const Workspace: React.FC = () => {
       setIsRunning(true);
       setRunResult(null);
 
+      const payload = {
+          sourceCode: value || "",
+          languageId: langIdMap[language] || 71,
+          problemId: problem.dbId
+      };
+      
+      console.log("Sending run request:", {
+          language,
+          languageId: payload.languageId,
+          sourceCodeLength: payload.sourceCode?.length,
+          problemId: payload.problemId
+      });
+
       try {
           const response = await axios.post(
               `${import.meta.env.VITE_BASE_URL}${import.meta.env.VITE_API_VERSION}/submissions/run`,
-              {
-                  sourceCode: value,
-                  languageId: langIdMap[language || "python"],
-                  problemId: problem.dbId
-              }
+              payload
           );
           const result = response.data;
           setRunResult(result);
@@ -215,8 +223,8 @@ const Workspace: React.FC = () => {
           const response = await axios.post(
               `${import.meta.env.VITE_BASE_URL}${import.meta.env.VITE_API_VERSION}/submissions/submit`,
               {
-                  sourceCode: value,
-                  languageId: langIdMap[language || "python"],
+                  sourceCode: value || "",
+                  languageId: langIdMap[language] || 71,
                   problemId: problem.dbId
               },
               {

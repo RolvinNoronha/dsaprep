@@ -69,6 +69,11 @@ public class SubmissionsController
     @PostMapping("/run")
     public ResponseEntity<RunCodeResponse> runCode(@RequestBody RunCodeRequest request)
     {
+        log.info("Received run request: sourceCode length={}, languageId={}, problemId={}",
+                request.getSourceCode() != null ? request.getSourceCode().length() : 0,
+                request.getLanguageId(),
+                request.getProblemId());
+        
         Problem problem = problemService.getProblemById(request.getProblemId());
         
         // Get the first test case

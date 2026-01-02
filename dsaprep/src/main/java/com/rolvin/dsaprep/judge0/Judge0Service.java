@@ -1,9 +1,17 @@
 package com.rolvin.dsaprep.judge0;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 @Service
 @Slf4j
@@ -11,6 +19,7 @@ public class Judge0Service
 {
     private final RestTemplate restTemplate;
     private final String judge0BaseUrl;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public Judge0Service(RestTemplate restTemplate, @Value("${judge0.api.url}") String judge0BaseUrl) {
         this.restTemplate = restTemplate;
@@ -18,26 +27,50 @@ public class Judge0Service
         log.info("Judge0 API URL configured: {}", judge0BaseUrl);
     }
 
-    public String submitCode(String sourceCode, int languageId, String stdin, String expectedOutput)
+    private String encodeBase64(String value) {
+        if (value == null) return null;
+        return Base64.getEncoder().encodeToString(value.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public String submitCode(String sourceCode, Integer languageId, String stdin, String expectedOutput)
     {
+        // Encode all string fields as base64
         SubmitRequest submitRequest = SubmitRequest.builder()
-                .sourceCode(sourceCode)
+                .sourceCode(encodeBase64(sourceCode))
                 .languageId(languageId)
-                .stdin(stdin)
-                .expectedOutput(expectedOutput)
+                .stdin(encodeBase64(stdin))
+                .expectedOutput(encodeBase64(expectedOutput))
                 .build();
 
-        String submissionsUrl = judge0BaseUrl + "/submissions?base64_encoded=false&wait=false";
-        log.debug("Submitting code to Judge0: {}", submissionsUrl);
+        String submissionsUrl = judge0BaseUrl + "/submissions?base64_encoded=true&wait=false";
+        
+        // Set Content-Type header
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        
+        log.info("Submitting to Judge0: URL={}, languageId={}, sourceCode length={}", 
+                submissionsUrl, languageId, sourceCode != null ? sourceCode.length() : 0);
+        
+        // Serialize and send the JSON
+        String jsonPayload;
+        try {
+            jsonPayload = objectMapper.writeValueAsString(submitRequest);
+            log.info("Sending base64-encoded request to Judge0, payload: {}", jsonPayload);
+        } catch (JsonProcessingException e) {
+            log.error("Failed to serialize request", e);
+            throw new RuntimeException("Failed to serialize request", e);
+        }
+        
+        HttpEntity<String> jsonRequest = new HttpEntity<>(jsonPayload, headers);
         
         SubmitResponse response = restTemplate.postForObject(
                 submissionsUrl, 
-                submitRequest,
+                jsonRequest,
                 SubmitResponse.class
         );
 
         if (response != null && response.getToken() != null) {
-            log.debug("Received token from Judge0: {}", response.getToken());
+            log.info("Received token from Judge0: {}", response.getToken());
             return response.getToken();
         }
         throw new RuntimeException("Failed to submit code to Judge0");
